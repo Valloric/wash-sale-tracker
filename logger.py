@@ -1,17 +1,20 @@
 import abc
 import six
 
+
 class Logger(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
-    def print_lots(self,
-                   message,
-                   lots,
-                   loss_lots=None,
-                   split_off_loss_lots=None,
-                   replacement_lots=None,
-                   split_off_replacement_lots=None):
+    def print_lots(
+        self,
+        message,
+        lots,
+        loss_lots=None,
+        split_off_loss_lots=None,
+        replacement_lots=None,
+        split_off_replacement_lots=None,
+    ):
         """Prints out the lots, along with the provided message.
 
         Args:
@@ -26,25 +29,33 @@ class Logger(object):
 
 
 class TermLogger(Logger):
-    def print_lots(self,
-                   message,
-                   lots,
-                   loss_lots=None,
-                   split_off_loss_lots=None,
-                   replacement_lots=None,
-                   split_off_replacement_lots=None):
-        print('')
-        lots.do_print(loss_lots, split_off_loss_lots, replacement_lots,
-                      split_off_replacement_lots)
-        six.moves.input(message + '. Hit enter to continue>')
+    def print_lots(
+        self,
+        message,
+        lots,
+        loss_lots=None,
+        split_off_loss_lots=None,
+        replacement_lots=None,
+        split_off_replacement_lots=None,
+    ):
+        print("")
+        lots.do_print(
+            loss_lots,
+            split_off_loss_lots,
+            replacement_lots,
+            split_off_replacement_lots,
+        )
+        six.moves.input(message + ". Hit enter to continue>")
 
 
 class NullLogger(Logger):
-    def print_lots(self,
-                   message,
-                   lots,
-                   loss_lots=None,
-                   split_off_loss_lots=None,
-                   replacement_lots=None,
-                   split_off_replacement_lots=None):
+    def print_lots(
+        self,
+        message,
+        lots,
+        loss_lots=None,
+        split_off_loss_lots=None,
+        replacement_lots=None,
+        split_off_replacement_lots=None,
+    ):
         pass

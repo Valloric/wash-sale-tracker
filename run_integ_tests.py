@@ -18,24 +18,29 @@ def run_test(infile, outfile):
     lots.sort(key=cmp_to_key(lots_lib.Lot.cmp_by_buy_date))
     expected.sort(key=cmp_to_key(lots_lib.Lot.cmp_by_buy_date))
     if not lots.contents_equal(expected):
-        print('Test failed: {}'.format(infile))
-        print('Got result:')
+        print("Test failed: {}".format(infile))
+        print("Got result:")
         lots.do_print()
-        print('Expected:')
+        print("Expected:")
         expected.do_print()
-        print('\n\n')
+        print("\n\n")
     else:
         print("Test passed: {}".format(infile))
 
 
 def main():
-    tests_dir = os.path.join(os.getcwd(), 'tests')
-    tests = [name
-             for name in os.listdir(tests_dir)
-             if name.endswith('.csv') and not name.endswith('_out.csv')]
+    tests_dir = os.path.join(os.getcwd(), "tests")
+    tests = [
+        name
+        for name in os.listdir(tests_dir)
+        if name.endswith(".csv") and not name.endswith("_out.csv")
+    ]
     for test in tests:
-        run_test(os.path.join(tests_dir, test),
-             os.path.join(tests_dir, test.rsplit('.', 1)[0] + "_out.csv"))
+        run_test(
+            os.path.join(tests_dir, test),
+            os.path.join(tests_dir, test.rsplit(".", 1)[0] + "_out.csv"),
+        )
+
 
 if __name__ == "__main__":
-  main()
+    main()

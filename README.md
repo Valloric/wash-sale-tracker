@@ -6,22 +6,25 @@ Note that the author is not a CPA or tax expert. This program most certainly con
 
 This script is inspired by [adlr/wash-sale-calculator](https://github.com/adlr/wash-sale-calculator), but rewritten so that the author could reason about how the replacement lots were being chosen. It also includes keeps track of some additional fields, like the original basis and buy date, to make it easy to correlate the output with a 1099-B.
 
-## Dependencies
+# Installing
 
-The script runs best in interactive mode if these two dependencies are installed:
-
-* [terminaltables](https://github.com/Robpol86/terminaltables)
-* [colorclass](https://github.com/Robpol86/colorclass)
+- Install [`pipenv`](https://pypi.org/project/pipenv/). This is usually either `sudo apt install pipenv` or `pip install --user pipenv`.
+- `cd` into project directory
+- `pipenv shell` to enter the virtual environment
+- `pipenv sync` to download all the dependencies
 
 # Running
 
-To use the program from a terminal, run:
+After running `pipenv shell`, inside the virtual environment shell run:
 
-`python2 wash.py -w dummy_example.csv -o out.csv --output-dollars`
+`./wash.py -w dummy_example.csv -o out.csv --output-dollars`
 
 The `--output-dollars` argument makes the final outputs for money columns in dollars instead of cents.
 
-The csv file must have one buy or buy-sell trade per row. Each row must have all of the following columns, but the optional ones can remain blank:
+The CSV file must have one buy or buy-sell trade per row. Each row must have all of the following
+columns, but the optional ones can remain blank.
+
+The `parse_morgan_stanley.py` file can help in parsing 1099-Bs from Morgan Stanley and in producing the right CSV file that `wash.py` needs.
 
 | Column Header | Type | Description |
 |---------------|------|-------------|
@@ -29,7 +32,7 @@ The csv file must have one buy or buy-sell trade per row. Each row must have all
 | Symbol | String | Stock symbol. This is unused by the script, as all lots fed into the script are considered substantially identical. |
 | Description | String | An arbitrary description of this lot. |
 | Buy Date | Date (mm/dd/yyyy) | The date that this lot was actually bought. |
-| Adjusted Buy Date | Date (mmdd/yyyy) | Optional. The adjusted buy date of a loss. Provided by the output. |
+| Adjusted Buy Date | Date (mm/dd/yyyy) | Optional. The adjusted buy date of a loss. Provided by the output. See IRS Publication 550, Wash Sales section for why this matters. Specifically this sentence: _"Your holding period for the new stock or securities includes the holding period of the stock or securities sold."_ |
 | Basis | Integer | The number of cents for the cost basis of this lot. |
 | Adjusted Basis | Integer | Optional. The number of cents of the adjusted cost basis of this lot. Provided by the output. |
 | Sell Date | Date (mm/dd/yyyy) | Optional. The date that this lot was sold. |
@@ -50,10 +53,4 @@ If multiple lots are bought on the same day and sold on the same day (though the
 
 ## Contributing
 
-If you commit changes to this software, make sure all tests are passing. To verify that all the tests pass:
-
-```
-python2 lots_test.py
-python2 wash_test.py
-python2 run_integ_tests.py
-```
+If you commit changes to this software, make sure all tests are passing. To verify that all the tests pass, just run `./run_tests.py` from within the virtual environment shell.

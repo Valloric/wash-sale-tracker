@@ -17,7 +17,9 @@ The script runs best in interactive mode if these two dependencies are installed
 
 To use the program from a terminal, run:
 
-`python2 wash.py -w dummy_example.csv -o out.csv`
+`python2 wash.py -w dummy_example.csv -o out.csv --output-dollars`
+
+The `--output-dollars` argument makes the final outputs for money columns in dollars instead of cents.
 
 The csv file must have one buy or buy-sell trade per row. Each row must have all of the following columns, but the optional ones can remain blank:
 
@@ -55,4 +57,3 @@ python2 lots_test.py
 python2 wash_test.py
 python2 run_integ_tests.py
 ```
-

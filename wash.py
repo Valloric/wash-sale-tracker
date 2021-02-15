@@ -254,6 +254,12 @@ def main():
     parser.add_argument("-o", "--out_file")
     parser.add_argument("-w", "--do_wash", metavar="in_file")
     parser.add_argument("-q", "--quiet", action="store_true")
+    parser.add_argument(
+        "-d",
+        "--output-dollars",
+        action="store_true",
+        help="If set, outputs dollars instead of cents for money columns",
+    )
     parsed = parser.parse_args()
 
     if parsed.quiet:
@@ -268,7 +274,7 @@ def main():
         wash_all_lots(lots, logger)
         if parsed.out_file:
             with open(parsed.out_file, "w") as f:
-                lots.write_csv_data(f)
+                lots.write_csv_data(f, parsed.output_dollars)
         else:
             logger.print_lots("Final lots", lots)
 

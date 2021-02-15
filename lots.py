@@ -1,6 +1,10 @@
 import copy
 import csv
 import datetime
+from moneyed import Money
+from moneyed.l10n import format_money
+import decimal
+from decimal import Decimal
 from functools import cmp_to_key
 
 _HAS_TERMINALTABLES = False
@@ -568,7 +572,7 @@ class Lots(object):
             lots.append(Lot(**row))
         return Lots(lots)
 
-    def write_csv_data(self, output_file):
+    def write_csv_data(self, output_file, output_dollars):
         """Writes this lots data as CSV data to an output file.
 
         Args:
@@ -595,6 +599,20 @@ class Lots(object):
                 return "|".join(value)
             return ""
 
+        def money_string(value):
+            if not output_dollars:
+                return convert_from_int(value)
+            if value:
+                dollars = Decimal(value) / 100
+                # ROUND_HALF_UP is the rounding method the IRS uses
+                rounded_dollars = dollars.quantize(
+                    Decimal("1."), rounding=decimal.ROUND_HALF_UP
+                )
+                money = Money(rounded_dollars, currency="USD")
+                # slice off the ".00" at the end
+                return format_money(money, locale="en_US")[:-3]
+            return ""
+
         writer = csv.DictWriter(output_file, fieldnames=Lot.FIELD_NAMES)
         writer.writerow(self.HEADERS)
         for lot in self._lots:
@@ -609,15 +627,15 @@ class Lots(object):
                 row["adjusted_buy_date"] = convert_from_date(
                     lot.adjusted_buy_date
                 )
-            row["basis"] = convert_from_int(lot.basis)
+            row["basis"] = money_string(lot.basis)
             if lot.basis == lot.adjusted_basis:
                 row["adjusted_basis"] = ""
             else:
-                row["adjusted_basis"] = convert_from_int(lot.adjusted_basis)
+                row["adjusted_basis"] = money_string(lot.adjusted_basis)
             row["sell_date"] = convert_from_date(lot.sell_date)
-            row["proceeds"] = convert_from_int(lot.proceeds)
+            row["proceeds"] = money_string(lot.proceeds)
             row["adjustment_code"] = lot.adjustment_code
-            row["adjustment"] = convert_from_int(lot.adjustment)
+            row["adjustment"] = money_string(lot.adjustment)
             row["form_position"] = lot.form_position
             row["buy_lot"] = lot.buy_lot
             row["replacement_for"] = convert_from_string_list(

@@ -10,6 +10,8 @@ black = "*"
 terminaltables = "*"
 colorclass = "*"
 six = "*"
+arrow = "*"
+py-moneyed = "*"
 
 [requires]
 python_version = "3.7"
